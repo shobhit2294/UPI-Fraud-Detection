@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - fraud-engine
+      - fraud-ml
+      - redis
+      - db
+
+  fraud-engine:
+    build: ./fraud-engine
+    ports:
+      - "9000:9000"
+
+  fraud-ml:
+    build: ./fraud-ml-service
+    ports:
+      - "9100:9100"
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: upi_user
+      POSTGRES_PASSWORD: upi_pass
+      POSTGRES_DB: upi_fraud_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+

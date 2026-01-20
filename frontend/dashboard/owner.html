@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Owner Dashboard</title>
+
+    <style>
+        table {
+            width: 90%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        .safe { color: green; font-weight: bold; }
+        .suspicious { color: orange; font-weight: bold; }
+        .fraud { color: red; font-weight: bold; }
+    </style>
+</head>
+
+<body>
+
+<h2>Owner Fraud Dashboard</h2>
+
+<button onclick="simulateTransaction()">Simulate Transaction</button>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Risk %</th>
+        </tr>
+    </thead>
+    <tbody id="txTable"></tbody>
+</table>
+
+<h3>Daily Transaction Analytics</h3>
+<canvas id="analyticsChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/owner.js"></script>
+
+</body>
+</html>
