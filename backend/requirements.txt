@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+python-jose
+passlib[bcrypt]
+sqlalchemy
+pydantic
+firebase-admin
+python-multipart
+python-dotenv
+psycopg2-binary
+redis
+rq
+requests

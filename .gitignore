@@ -1,0 +1,24 @@
+# secrets -- never commit
+backend/.env
+.env
+backend/firebase/firebase-key.json
+
+# local databases
+backend/database.db
+*.db
+
+# python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# generated fraud-model artifacts and evaluation output
+fraud-ml-service/model_bundle.pkl
+fraud-ml-service/evaluation_report.json
+
+# node (legacy, harmless if unused)
+node_modules/
+
+# OS
+.DS_Store

@@ -1,51 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Owner Dashboard</title>
-
-    <style>
-        table {
-            width: 90%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #ccc;
-            text-align: center;
-        }
-
-        .safe { color: green; font-weight: bold; }
-        .suspicious { color: orange; font-weight: bold; }
-        .fraud { color: red; font-weight: bold; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <title>TrustPay Console</title>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/console.css">
 </head>
+<body class="console-body">
 
-<body>
+  <aside class="console-sidebar">
+    <div class="console-brand">
+      <span class="mark">🛡️</span>
+      <span>TrustPay<span class="sub">Console</span></span>
+    </div>
 
-<h2>Owner Fraud Dashboard</h2>
+    <nav class="console-nav">
+      <button class="console-nav-item active" id="cnav-overview" onclick="switchConsoleView('overview')">
+        <span class="icon">📊</span> Overview
+      </button>
+      <button class="console-nav-item" id="cnav-transactions" onclick="switchConsoleView('transactions')">
+        <span class="icon">🧾</span> Transactions
+      </button>
+      <button class="console-nav-item" id="cnav-analytics" onclick="switchConsoleView('analytics')">
+        <span class="icon">📈</span> Analytics
+      </button>
+    </nav>
 
-<button onclick="simulateTransaction()">Simulate Transaction</button>
+    <div class="console-footer">
+      <div class="console-user">
+        <span class="dot" id="ownerAvatar">A</span>
+        <span id="ownerEmail">Owner</span>
+      </div>
+      <button class="console-logout" onclick="logout()">Log out</button>
+    </div>
+  </aside>
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Risk %</th>
-        </tr>
-    </thead>
-    <tbody id="txTable"></tbody>
-</table>
+  <main class="console-main">
 
-<h3>Daily Transaction Analytics</h3>
-<canvas id="analyticsChart"></canvas>
+    <!-- ===== OVERVIEW ===== -->
+    <section class="console-view active" id="cview-overview">
+      <div class="console-topline">
+        <h1>Fraud overview</h1>
+        <button class="console-refresh-btn" onclick="loadSummary(); loadTransactions();">Refresh</button>
+      </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="../js/api.js"></script>
-<script src="../js/owner.js"></script>
+      <div class="stat-grid" id="statGrid">
+        <div class="stat-card"><div class="label">Total transactions</div><div class="value amt" id="statTotal">—</div></div>
+        <div class="stat-card danger"><div class="label">Flagged as fraud</div><div class="value amt" id="statFraud">—</div></div>
+        <div class="stat-card ok"><div class="label">Safe</div><div class="value amt" id="statSafe">—</div></div>
+        <div class="stat-card warn"><div class="label">Fraud rate</div><div class="value amt" id="statRate">—</div></div>
+      </div>
+
+      <div class="console-card">
+        <h2>Most recent transactions</h2>
+        <table class="console-table">
+          <thead>
+            <tr><th>ID</th><th>Payee</th><th>Amount</th><th>Status</th><th>Risk</th></tr>
+          </thead>
+          <tbody id="txTableRecent"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== TRANSACTIONS ===== -->
+    <section class="console-view" id="cview-transactions">
+      <div class="console-topline">
+        <h1>All transactions</h1>
+        <button class="console-refresh-btn" onclick="loadTransactions()">Refresh</button>
+      </div>
+
+      <div class="console-card">
+        <table class="console-table">
+          <thead>
+            <tr><th>ID</th><th>User</th><th>Payee</th><th>Amount</th><th>Status</th><th>Risk</th><th>Location signal</th></tr>
+          </thead>
+          <tbody id="txTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===== ANALYTICS ===== -->
+    <section class="console-view" id="cview-analytics">
+      <div class="console-topline">
+        <h1>Daily analytics</h1>
+        <span class="refresh-note">Total vs. flagged transactions per day</span>
+      </div>
+
+      <div class="console-card">
+        <canvas id="analyticsChart" height="110"></canvas>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/authGuard.js"></script>
+  <script src="../js/ownerGuard.js"></script>
+  <script src="../js/consoleNav.js"></script>
+  <script src="../js/analytics.js"></script>
+  <script src="../js/owner.js"></script>
+  <script src="../js/logout.js"></script>
 
 </body>
 </html>

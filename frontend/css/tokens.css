@@ -1,0 +1,67 @@
+/* ============================================================
+   TRUSTPAY DESIGN TOKENS
+   Shared across the consumer app (phone-frame) and the ops
+   Console (dark sidebar). One brand, two very different products.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  /* ---- brand violet ---- */
+  --violet-900: #2E1065;
+  --violet-700: #5B21B6;
+  --violet-600: #6D28D9;
+  --violet-500: #7C3AED;
+  --violet-100: #F1E9FE;
+
+  /* ---- verified / success teal (deliberately a different hue from violet) ---- */
+  --teal-600: #0D9488;
+  --teal-500: #0EA5A0;
+  --teal-100: #DCFCF7;
+
+  /* ---- risk / fraud ---- */
+  --amber-500: #F59E0B;
+  --amber-100: #FEF3C7;
+  --red-600: #DC2626;
+  --red-100: #FEE2E2;
+
+  /* ---- neutrals (warm violet-tinted, not pure gray) ---- */
+  --ink-900: #17121F;
+  --ink-700: #372F45;
+  --ink-500: #6E6580;
+  --ink-300: #B4ABC4;
+  --paper: #F8F6FB;
+  --card: #FFFFFF;
+  --line: #E7E1F2;
+
+  /* ---- type ---- */
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ---- radius / shadow ---- */
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 24px;
+  --shadow-card: 0 1px 2px rgba(23,18,31,0.04), 0 8px 24px rgba(46,16,101,0.08);
+  --shadow-pop: 0 12px 32px rgba(46,16,101,0.22);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  background: var(--paper);
+}
+
+.amt, .mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}

@@ -1,11 +1,14 @@
-FROM node:20
+FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY package.json .
-
-RUN npm install
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["npm", "start"]
+EXPOSE 8000
+
+# Default command runs the API. docker-compose overrides this for the
+# reconciliation-worker service to run `rq worker` instead.
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

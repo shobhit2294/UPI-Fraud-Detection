@@ -1,61 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .login-box {
-            background: white;
-            padding: 30px;
-            width: 300px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background: #1d4ed8;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <title>TrustPay — Log in</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/auth.css">
 </head>
+<body class="app-body">
 
-<body>
+  <div class="phone">
+    <div class="status-bar">
+      <span id="clock">9:41</span>
+      <span>●●●● TrustPay</span>
+    </div>
 
-<div class="login-box">
-    <h2>Login</h2>
+    <div class="auth-hero">
+      <div class="auth-mark">🛡️</div>
+      <h1>TrustPay</h1>
+      <p class="auth-tag">Verified payees. Watched transactions. No surprises.</p>
+    </div>
 
-    <input type="text" id="phone" placeholder="Phone number">
-    <input type="password" id="password" placeholder="Password">
+    <div class="auth-sheet">
+      <h2>Log in with your phone</h2>
+      <p class="auth-sub">We’ll send a secure one-time password to your number.</p>
 
-    <button onclick="login()">Login</button>
-</div>
+      <div class="field">
+        <label for="phone">Mobile number</label>
+        <input type="tel" id="phone" placeholder="9876543210" autocomplete="tel" inputmode="tel">
+      </div>
 
-<script src="js/auth.js"></script>
+      <div id="otp-area" class="otp-area" hidden>
+        <div class="field">
+          <label for="otp">6-digit OTP</label>
+          <input type="text" id="otp" placeholder="••••••" autocomplete="one-time-code" inputmode="numeric" maxlength="6">
+        </div>
+        <p id="otp-message" class="otp-message" role="status"></p>
+      </div>
+
+      <button id="send-otp-button" class="btn-pay" onclick="requestOtp()">Send OTP</button>
+      <button id="verify-otp-button" class="btn-pay secondary-action" onclick="verifyOtp()" hidden>Verify and continue</button>
+
+      <p class="auth-footnote">
+        Demo mode fills the OTP automatically. Production SMS delivery requires
+        Firebase Phone Auth or an SMS provider such as Twilio.
+      </p>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/login.js"></script>
 
 </body>
 </html>

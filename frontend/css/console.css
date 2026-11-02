@@ -1,0 +1,285 @@
+/* ============================================================
+   TRUSTPAY CONSOLE — OPS / ADMIN
+   Deliberately not the phone app: a wide, dense, dark-sidebar
+   operations tool. Same brand vocabulary (violet/teal/amber/red)
+   but built for someone watching risk across every user, not
+   making a single payment.
+   ============================================================ */
+
+body.console-body {
+  background: var(--paper);
+  min-height: 100vh;
+  display: flex;
+}
+
+.console-sidebar {
+  width: 232px;
+  flex-shrink: 0;
+  background: var(--violet-900);
+  color: var(--card);
+  display: flex;
+  flex-direction: column;
+  padding: 22px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.console-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  padding: 0 6px 22px;
+}
+
+.console-brand .mark {
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--teal-500);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.console-brand .sub {
+  display: block;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.55;
+}
+
+.console-nav { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+
+.console-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-sm);
+  color: rgba(255,255,255,0.65);
+  font-size: 0.86rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: none;
+  text-align: left;
+  width: 100%;
+}
+
+.console-nav-item:hover { background: rgba(255,255,255,0.06); color: var(--card); }
+
+.console-nav-item.active {
+  background: rgba(255,255,255,0.12);
+  color: var(--card);
+  font-weight: 600;
+}
+
+.console-nav-item .icon { font-size: 1rem; width: 18px; text-align: center; }
+
+.console-footer {
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding-top: 14px;
+  margin-top: 10px;
+}
+
+.console-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 10px;
+}
+
+.console-user .dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+}
+
+.console-logout {
+  width: 100%;
+  padding: 9px;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(255,255,255,0.2);
+  background: transparent;
+  color: var(--card);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* ---- main pane ---- */
+.console-main {
+  flex: 1;
+  min-width: 0;
+  padding: 30px 36px 50px;
+}
+
+.console-topline {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.console-topline h1 {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.console-topline .refresh-note {
+  font-size: 0.78rem;
+  color: var(--ink-500);
+}
+
+.console-view { display: none; }
+.console-view.active { display: block; animation: fadeIn 0.18s ease; }
+
+/* ---- stat cards ---- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.stat-card {
+  background: var(--card);
+  border-radius: var(--r-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-card);
+  border-left: 3px solid var(--violet-500);
+}
+
+.stat-card.danger { border-left-color: var(--red-600); }
+.stat-card.warn { border-left-color: var(--amber-500); }
+.stat-card.ok { border-left-color: var(--teal-500); }
+
+.stat-card .label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  color: var(--ink-500);
+  margin-bottom: 8px;
+}
+
+.stat-card .value {
+  font-family: var(--font-mono);
+  font-size: 1.65rem;
+  font-weight: 700;
+}
+
+/* ---- console cards / table ---- */
+.console-card {
+  background: var(--card);
+  border-radius: var(--r-lg);
+  padding: 22px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 22px;
+}
+
+.console-card h2 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  margin: 0 0 16px;
+}
+
+table.console-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+table.console-table th {
+  text-align: left;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-500);
+  font-weight: 600;
+  padding: 8px 10px;
+  border-bottom: 1.5px solid var(--line);
+}
+
+table.console-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+table.console-table tr:last-child td { border-bottom: none; }
+
+.risk-badge {
+  display: inline-flex;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.risk-badge.low { background: var(--teal-100); color: var(--teal-600); }
+.risk-badge.med { background: var(--amber-100); color: #92610A; }
+.risk-badge.high { background: var(--red-100); color: var(--red-600); }
+
+.status-tag {
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 6px;
+}
+
+.status-tag.SETTLED { background: var(--teal-100); color: var(--teal-600); }
+.status-tag.FAILED { background: var(--red-100); color: var(--red-600); }
+.status-tag.STUCK_PENDING_RECONCILIATION { background: var(--amber-100); color: #92610A; }
+.status-tag.INITIATED,
+.status-tag.BANK_ACK,
+.status-tag.PSP_PROCESSING,
+.status-tag.AGGREGATOR_PROCESSING,
+.status-tag.OTP_REQUIRED { background: var(--violet-100); color: var(--violet-700); }
+
+.console-empty {
+  text-align: center;
+  padding: 40px 10px;
+  color: var(--ink-500);
+  font-size: 0.88rem;
+}
+
+.console-refresh-btn {
+  padding: 8px 16px;
+  border-radius: var(--r-sm);
+  border: 1.5px solid var(--violet-500);
+  background: var(--violet-100);
+  color: var(--violet-700);
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+@media (max-width: 820px) {
+  body.console-body { flex-direction: column; }
+  .console-sidebar { width: 100%; height: auto; position: relative; flex-direction: row; align-items: center; padding: 12px 14px; }
+  .console-nav { flex-direction: row; overflow-x: auto; }
+  .console-footer { display: none; }
+  .console-brand { padding: 0 10px 0 0; }
+  .console-main { padding: 20px 16px 40px; }
+}

@@ -2,31 +2,7 @@ version: "3.9"
 
 services:
 
-  backend:
-    build: ./backend
-    ports:
-      - "8000:8000"
-    depends_on:
-      - fraud-engine
-      - fraud-ml
-      - redis
-      - db
-
-  fraud-engine:
-    build: ./fraud-engine
-    ports:
-      - "9000:9000"
-
-  fraud-ml:
-    build: ./fraud-ml-service
-    ports:
-      - "9100:9100"
-
-  redis:
-    image: redis:7
-    ports:
-      - "6379:6379"
-
+  # ---------------- Postgres: source of truth for users/transactions ----------------
   db:
     image: postgres:15
     environment:
@@ -37,7 +13,72 @@ services:
       - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U upi_user -d upi_fraud_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ---------------- Redis: job queue broker for async settlement ----------------
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ---------------- fraud-ml-service: standalone risk-scoring microservice ----------------
+  fraud-ml:
+    build: ./fraud-ml-service
+    ports:
+      - "9100:9100"
+    environment:
+      REDIS_URL: redis://redis:6379/1
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # ---------------- backend: payment orchestrator API ----------------
+  backend:
+    build: ./backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    environment:
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?set JWT_SECRET_KEY in your .env}
+      DATABASE_URL: postgresql://upi_user:upi_pass@db:5432/upi_fraud_db
+      REDIS_URL: redis://redis:6379/0
+      FRAUD_ML_SERVICE_URL: http://fraud-ml:9100
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://127.0.0.1:5500,http://localhost:5500}
+      FIREBASE_CREDENTIALS_PATH: /run/secrets/firebase-key.json
+      DEMO_MODE: ${DEMO_MODE:-true}
+    volumes:
+      - ./backend/firebase/firebase-key.json:/run/secrets/firebase-key.json:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      fraud-ml:
+        condition: service_started
+
+  # ---------------- reconciliation-worker: simulates the multi-hop settlement chain ----------------
+  reconciliation-worker:
+    build: ./backend
+    command: rq worker --url redis://redis:6379/0 settlement
+    environment:
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?set JWT_SECRET_KEY in your .env}
+      DATABASE_URL: postgresql://upi_user:upi_pass@db:5432/upi_fraud_db
+      REDIS_URL: redis://redis:6379/0
+      FRAUD_ML_SERVICE_URL: http://fraud-ml:9100
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
 volumes:
   pgdata:
-

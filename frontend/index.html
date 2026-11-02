@@ -1,16 +1,60 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>UPI Fraud Detection System</title>
-  <link rel="stylesheet" href="css/main.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <title>TrustPay — Fraud-aware UPI payments</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <style>
+    body.landing {
+      background: linear-gradient(180deg, var(--violet-900) 0%, #150a2e 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .landing-card {
+      max-width: 420px;
+      text-align: center;
+      color: var(--card);
+    }
+    .landing-mark {
+      width: 60px; height: 60px; border-radius: 18px;
+      background: var(--teal-500);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; margin-bottom: 18px;
+    }
+    .landing-card h1 {
+      font-family: var(--font-display); font-size: 2rem; margin: 0 0 12px;
+    }
+    .landing-card p {
+      font-size: 0.95rem; opacity: 0.8; line-height: 1.6; margin: 0 0 26px;
+    }
+    .landing-card a {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--violet-500), var(--teal-500));
+      color: var(--card);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(14,165,160,0.25);
+    }
+  </style>
 </head>
-<body>
-  <h1>UPI Fraud Detection System</h1>
-  <p>
-    This platform uses Machine Learning to detect suspicious UPI transactions
-    and protect users from fraud.
-  </p>
-
-  <a href="login.html">Login</a>
+<body class="landing">
+  <div class="landing-card">
+    <div class="landing-mark">🛡️</div>
+    <h1>TrustPay</h1>
+    <p>
+      Verify who you're paying before you pay them. Watch every transaction
+      move through the real settlement chain, live. Step-up OTP kicks in
+      automatically when something looks risky.
+    </p>
+    <a href="login.html">Log in to continue</a>
+  </div>
 </body>
 </html>

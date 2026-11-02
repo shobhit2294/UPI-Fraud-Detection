@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+pandas
+scikit-learn
+joblib
+redis
+# Optional explainability dependency. The service falls back to structured heuristics if unavailable.
+shap

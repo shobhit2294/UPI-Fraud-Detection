@@ -1,21 +1,161 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>User Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <title>TrustPay</title>
+  <link rel="stylesheet" href="../css/tokens.css">
+  <link rel="stylesheet" href="../css/app.css">
 </head>
-<body>
+<body class="app-body">
 
-<h2>User Dashboard</h2>
+  <div class="phone">
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>●●●● TrustPay</span>
+    </div>
 
-<button onclick="logout()">Logout</button>
+    <div class="app-bar">
+      <div class="brand-row">
+        <div class="brand"><span class="mark">🛡️</span> TrustPay</div>
+        <button class="icon-btn" onclick="switchTab('profile')">👤</button>
+      </div>
+      <div class="greeting">Good to see you, <strong id="greetingName">there</strong></div>
+    </div>
 
-<!-- AUTH CHECK -->
-<script src="../js/authGuard.js"></script>
+    <div class="app-body-scroll">
 
-<!-- LOGOUT -->
-<script src="../js/logout.js"></script>
-<script src="../js/userGuard.js"></script>
+      <!-- ===== HOME / PAY TAB ===== -->
+      <section class="tab-panel active" id="tab-home">
+        <div class="card">
+          <div class="section-eyebrow">Send money</div>
+          <h2>New transaction</h2>
 
+          <div class="field">
+            <label>Pay to (UPI VPA)</label>
+            <div class="payee-row">
+              <input type="text" id="payeeVpa" placeholder="name@bank">
+              <button type="button" class="btn-verify" onclick="verifyPayee()">Verify</button>
+            </div>
+            <div id="payeeResult" class="payee-result"></div>
+          </div>
+
+          <div class="field">
+            <label>Amount</label>
+            <input type="number" id="amount" placeholder="₹ 0.00">
+          </div>
+
+          <div class="field">
+            <label>Account balance</label>
+            <input type="number" id="balance" placeholder="₹ 0.00">
+          </div>
+
+          <div class="field">
+            <label>City</label>
+            <input type="text" id="city" placeholder="City">
+          </div>
+
+          <div class="field">
+            <label>Device</label>
+            <select id="device">
+              <option>Android</option>
+              <option>iPhone</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Payment type</label>
+            <select id="type">
+              <option>UPI</option>
+              <option>Card</option>
+              <option>NetBanking</option>
+            </select>
+          </div>
+
+          <div class="location-chip" id="locationStatus">📍 Requesting location…</div>
+
+          <button class="btn-pay" onclick="pay()">Proceed to pay</button>
+        </div>
+      </section>
+
+      <!-- ===== TRACK TAB ===== -->
+      <section class="tab-panel" id="tab-track">
+        <div class="card" id="timelineCard">
+          <div class="section-eyebrow">Live status</div>
+          <h2 id="timelineStatus">No active transaction</h2>
+          <ul id="timelineList" class="timeline-list"></ul>
+          <p class="empty-state" id="trackEmpty">Pay someone from the Home tab to see the settlement journey here — bank → PSP → aggregator → merchant, hop by hop.</p>
+        </div>
+      </section>
+
+      <!-- ===== HISTORY TAB ===== -->
+      <section class="tab-panel" id="tab-history">
+        <div class="card">
+          <div class="section-eyebrow">Your activity</div>
+          <h2>Transactions</h2>
+          <ul id="tx" class="tx-list"></ul>
+        </div>
+      </section>
+
+      <!-- ===== PROFILE TAB ===== -->
+      <section class="tab-panel" id="tab-profile">
+        <div class="card">
+          <div class="profile-header">
+            <div class="profile-avatar" id="profileAvatar">U</div>
+            <div>
+              <div style="font-weight:700; font-family: var(--font-display);" id="profileEmail">—</div>
+              <div style="font-size:0.78rem; color: var(--ink-500);">Role: User</div>
+            </div>
+          </div>
+          <div class="profile-row"><span class="k">Account type</span><span class="v">Personal</span></div>
+          <div class="profile-row"><span class="k">Fraud checks</span><span class="v">Active</span></div>
+          <div class="profile-row"><span class="k">Step-up OTP</span><span class="v">Enabled</span></div>
+        </div>
+        <button class="btn-secondary" onclick="logout()">Log out</button>
+      </section>
+
+    </div>
+
+    <!-- ===== BOTTOM TAB BAR ===== -->
+    <nav class="tab-bar">
+      <button class="tab-btn active" id="navbtn-home" onclick="switchTab('home')">
+        <span class="tab-icon">🏠</span> Home
+      </button>
+      <button class="tab-btn" id="navbtn-track" onclick="switchTab('track')">
+        <span class="tab-icon">🛰️</span> Track
+      </button>
+      <button class="tab-btn" id="navbtn-history" onclick="switchTab('history')">
+        <span class="tab-icon">🧾</span> History
+      </button>
+      <button class="tab-btn" id="navbtn-profile" onclick="switchTab('profile')">
+        <span class="tab-icon">👤</span> Profile
+      </button>
+    </nav>
+    <div class="home-indicator"><span></span></div>
+
+    <!-- ===== OTP MODAL (sheet) ===== -->
+    <div id="otpModal" class="modal-overlay">
+      <div class="modal-sheet">
+        <div class="sheet-handle"></div>
+        <h3>Verify it's you</h3>
+        <p class="modal-sub">This transaction looks risky. Enter the OTP to continue.</p>
+        <div id="demoOtpHint" class="demo-otp-hint"></div>
+        <input type="text" id="otpInput" class="otp-input" maxlength="6" placeholder="······">
+        <button class="btn-pay" onclick="submitOtp()">Confirm OTP</button>
+        <button class="btn-secondary" style="margin-top:10px;" onclick="closeOtpModal()">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/authGuard.js"></script>
+  <script src="../js/userGuard.js"></script>
+  <script src="../js/tabs.js"></script>
+  <script src="../js/payment.js"></script>
+  <script src="../js/transactions.js"></script>
+  <script src="../js/logout.js"></script>
 
 </body>
 </html>
